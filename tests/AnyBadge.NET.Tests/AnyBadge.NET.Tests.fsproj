@@ -25,4 +25,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\AnyBadge.NET\AnyBadge.NET.fsproj" />
+  </ItemGroup>
+
 </Project>

@@ -3,6 +3,9 @@ module Tests
 open System
 open Xunit
 
+open AnyBadge.NET
+
 [<Fact>]
-let ``My test`` () =
-    Assert.True(true)
+let ``Placeholder Test`` () =
+    Assert.Equal(Say.hello "World", "Hello World")
+

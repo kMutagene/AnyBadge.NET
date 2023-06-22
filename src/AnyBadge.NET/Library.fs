@@ -1,5 +1,8 @@
 ﻿namespace AnyBadge.NET
 
 module Say =
-    let hello name =
-        printfn "Hello %s" name
+    /// <summary>
+    /// Say hello to the given name.
+    /// </summary>
+    /// <param name="name"></param>
+    let hello name = $"Hello {name}"

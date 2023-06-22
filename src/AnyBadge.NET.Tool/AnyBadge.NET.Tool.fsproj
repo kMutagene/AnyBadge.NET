@@ -9,4 +9,8 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AnyBadge.NET\AnyBadge.NET.fsproj" />
+  </ItemGroup>
+
 </Project>
