@@ -11,3 +11,16 @@ let DEFAULT_COLOR= "#4c1"
 let DEFAULT_TEXT_COLOR = "#fff"
 
 let MASK_ID_PREFIX = "anybadge_"
+
+// Dictionary for looking up approx pixel widths of
+// supported fonts and font sizes.
+let FONT_WIDTHS = Map([
+    "DejaVu Sans,Verdana,Geneva,sans-serif", Map([
+        10, 9
+        11, 10
+        12, 11
+    ]);
+    "Arial, Helvetica, sans-serif", Map([
+        11, 8
+    ])
+])
