@@ -98,8 +98,8 @@ type Badge(
     ///◀────────────────────────────────────────────────────────────▶
     ///                         badge_width
     /// </summary>
-    member this.BadgeWidth =
-        this.LabelWidth + this.ValueWidth
+    //member this.BadgeWidth =
+    //    this.LabelWidth + this.ValueWidth
 
     ///<summary>
     /// Return the correct SVG template to render, based on the style and template
@@ -121,26 +121,26 @@ type Badge(
                 this.Template
 
 
-    member this.BadgeSvgText =
+    //member this.BadgeSvgText =
 
-        let badgeText = this.GetSvgTemplate()
+    //    let badgeText = this.GetSvgTemplate()
 
-        badgeText
-            .Replace(BADGE_WIDTH, string this.BadgeWidth)
-            .Replace(FONT_NAME, this.FontName)
-            .Replace(FONT_SIZE, this.FontSize)
-            .Replace(LABEL, this.Label)
-            .Replace(VALUE, this.value_text)
-            .Replace(LABEL_ANCHOR, str(this.label_anchor))
-            .Replace(LABEL_ANCHOR_SHADOW, str(this.label_anchor_shadow))
-            .Replace(VALUE_ANCHOR, str(this.value_anchor))
-            .Replace(VALUE_ANCHOR_SHADOW, str(this.value_anchor_shadow))
-            .Replace(COLOR, this.badge_color_code)
-            .Replace(LABEL_TEXT_COLOR, this.label_text_color)
-            .Replace(VALUE_TEXT_COLOR, this.value_text_color)
-            .Replace(COLOR_SPLIT_X, str(this.color_split_position))
-            .Replace(VALUE_WIDTH, str(this.value_width))
-            .Replace(MASK_ID, this.mask_str)
-            .Replace(VALUE_BOX_WIDTH, str(this.value_box_width))
-            .Replace(ARC_START, str(this.arc_start))
+    //    badgeText
+    //        .Replace(BADGE_WIDTH, string this.BadgeWidth)
+    //        .Replace(FONT_NAME, this.FontName)
+    //        .Replace(FONT_SIZE, this.FontSize)
+    //        .Replace(LABEL, this.Label)
+    //        .Replace(VALUE, this.value_text)
+    //        .Replace(LABEL_ANCHOR, str(this.label_anchor))
+    //        .Replace(LABEL_ANCHOR_SHADOW, str(this.label_anchor_shadow))
+    //        .Replace(VALUE_ANCHOR, str(this.value_anchor))
+    //        .Replace(VALUE_ANCHOR_SHADOW, str(this.value_anchor_shadow))
+    //        .Replace(COLOR, this.badge_color_code)
+    //        .Replace(LABEL_TEXT_COLOR, this.label_text_color)
+    //        .Replace(VALUE_TEXT_COLOR, this.value_text_color)
+    //        .Replace(COLOR_SPLIT_X, str(this.color_split_position))
+    //        .Replace(VALUE_WIDTH, str(this.value_width))
+    //        .Replace(MASK_ID, this.mask_str)
+    //        .Replace(VALUE_BOX_WIDTH, str(this.value_box_width))
+    //        .Replace(ARC_START, str(this.arc_start))
         

@@ -9,7 +9,7 @@
     <EmbeddedResource Include="templates/*.svg"></EmbeddedResource>
     <Compile Include="Globals.fs" />
     <Compile Include="Defaults.fs" />
-    <Compile Include="Common.fs" />
+    <Compile Include="Helpers.fs" />
     <Compile Include="Badge.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>

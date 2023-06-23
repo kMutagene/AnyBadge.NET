@@ -18,3 +18,13 @@ let ``gitlab scoped svg template is correct`` () =
         Globals.GITLAB_SCOPED_TEMPLATE,
         Common.getEmbeddedResource "templates.gitlab_scoped.svg"
     )
+
+[<Fact>]
+let ``fixed width font width calculation`` () =
+    let fontWidth = Helpers.getApproxStringWidth "GOOGLE|ijkl" 10 true
+    Assert.Equal(110, fontWidth)
+
+[<Fact>]
+let ``non-fixed width font width approximation`` () =
+    let fontWidth = Helpers.getApproxStringWidth "GOOGLE|ijkl" 10 false
+    Assert.Equal(77, fontWidth)
