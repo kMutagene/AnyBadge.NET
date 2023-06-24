@@ -236,3 +236,46 @@ type Badge(
             .Replace(VALUE_BOX_WIDTH, string this.ValueBoxWidth)
             .Replace(ARC_START, string this.ArcStart)
         
+    new (
+        Label: string,
+        Value: string,
+        ?FontName: string,
+        ?FontSize: int,
+        ?NumPaddingChars: int,
+        ?NumLabelPaddingChars: float,
+        ?NumValuePaddingChars: float,
+        ?Template: string,
+        ?Style: TemplateStyle,
+        ?ValuePrefix: string,
+        ?ValueSuffix: string,
+        ?Thresholds: Map<float,Color>,
+        ?DefaultColor: Color,
+        ?UseMaxWhenValueExceeds: bool,
+        ?ValueFormat,
+        ?TextColor: string,
+        ?Semver: bool
+    ) = 
+        Badge(
+            Label = Label,
+            Value = Value,
+            ?FontName = FontName,
+            ?FontSize = FontSize,
+            ?NumPaddingChars = NumPaddingChars,
+            ?NumLabelPaddingChars = NumLabelPaddingChars,
+            ?NumValuePaddingChars = NumValuePaddingChars,
+            ?Template = Template,
+            ?Style = Style,
+            ?ValuePrefix = ValuePrefix,
+            ?ValueSuffix = ValueSuffix,
+            ?Thresholds = (
+                Thresholds 
+                |> Option.map (fun m ->
+                    m |> Map.map (fun k v -> Color.toHexCode v)
+                )
+            ),
+            ?DefaultColor = (DefaultColor |> Option.map Color.toHexCode),
+            ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
+            ?ValueFormat = ValueFormat,
+            ?TextColor = TextColor,
+            ?Semver = Semver
+        )
