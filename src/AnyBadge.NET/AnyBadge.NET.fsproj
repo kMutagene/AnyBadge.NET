@@ -6,10 +6,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Playground.fsx" />
     <EmbeddedResource Include="templates/*.svg"></EmbeddedResource>
     <Compile Include="Globals.fs" />
     <Compile Include="Defaults.fs" />
     <Compile Include="Helpers.fs" />
+    <Compile Include="Color.fs" />
     <Compile Include="Badge.fs" />
     <Compile Include="Library.fs" />
   </ItemGroup>

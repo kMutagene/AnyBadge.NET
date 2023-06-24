@@ -82,24 +82,116 @@ type Badge(
     member this.DefaultColor = defaultColor
     member this.TextColor = textColor
     member this.LabelTextColor = labelTextColor
-    member this.Value_text_color = valueTextColor
+    member this.ValueTextColor = valueTextColor
     member this.Use_max_when_value_exceeds = defaultArg UseMaxWhenValueExceeds true
     //member this.Mask_str = self.__class__._get_next_mask_str() // not sure how to port this yet
 
     /// <summary>
-    ///The total width of badge.
+    /// Return the width multiplier for a font.
     ///
-    ///┌───────────────────────────┬────────────────────────────────┐
+    ///    Returns:
+    ///        int: Maximum pixel width of badges selected font.
     ///
-    ///│--------Label text---------│-----------Value text-----------│
+    ///    Example:
     ///
-    ///└───────────────────────────┴────────────────────────────────┘
-    ///
-    ///◀────────────────────────────────────────────────────────────▶
-    ///                         badge_width
+    ///        >>> Badge(label='x', value='1').font_width
+    ///        10
     /// </summary>
-    //member this.BadgeWidth =
-    //    this.LabelWidth + this.ValueWidth
+    member this.FontWidth = Defaults.FONT_WIDTHS[this.FontName][this.FontSize]
+
+    /// <summary>
+    /// Return the width of text.
+    ///
+    ///Args:
+    ///    text(str): Text to get the pixel width of.
+    ///
+    ///Returns:
+    ///    int: Pixel width of the given text based on the badges selected font.
+    ///
+    ///This implementation assumes a fixed font of:
+    ///
+    ///font-family="DejaVu Sans,Verdana,Geneva,sans-serif" font-size="11"
+    ///>>> badge = Badge('x', 1, font_name='DejaVu Sans,Verdana,Geneva,sans-serif', font_size=11)
+    ///>>> badge.get_text_width('pylint')
+    ///34
+    /// </summary>
+    /// <param name="text"></param>
+    member this.GetTextWidth(text: string) = Helpers.getApproxStringWidth text this.FontWidth false
+
+    /// <summary>
+    /// The SVG width of the label text.
+    /// </summary>
+    member this.LabelWidth =
+
+        float (this.GetTextWidth(this.Label))
+        + (2.0 * this.NumLabelPaddingChars * (float this.FontWidth))
+        |> int
+
+    /// <summary>
+    /// The SVG width of the value text.
+    /// </summary>
+    member this.ValueWidth =
+
+        float (this.GetTextWidth(this.Value))
+        + (2.0 * this.NumLabelPaddingChars * (float this.FontWidth))
+        |> int
+
+    /// <summary>
+    /// The SVG width of the value text box.
+    /// </summary>
+    member this.ValueBoxWidth = this.ValueWidth - 9
+
+    /// <summary>
+    ///The total width of badge.
+    /// </summary>
+    member this.BadgeWidth =
+        this.LabelWidth + this.ValueWidth
+
+    /// <summary>
+    /// The SVG x position where the color split should occur.
+    /// </summary>
+    member this.ColorSplitPosition =  this.BadgeWidth - this.ValueWidth
+
+    /// <summary>
+    /// The SVG x position of the middle anchor for the label text.
+    /// </summary>
+    member this.LabelAnchor = float this.ColorSplitPosition / 2.
+
+    /// <summary>
+    /// The SVG x position of the middle anchor for the value text.
+    /// </summary>
+    member this.ValueAnchor =
+        float this.ColorSplitPosition + ((float this.BadgeWidth - float this.ColorSplitPosition) / 2.)
+
+    ///<summary>
+    /// The SVG x position of the label shadow anchor.
+    /// </summary>
+    member this.LabelAnchorShadow = this.LabelAnchor + 1.
+
+    /// <summary>
+    /// The SVG x position of the value shadow anchor.
+    /// </summary>
+    member this.ValueAnchorShadow = this.ValueAnchor + 1.
+
+    /// <summary>
+    /// The position where the arc on the arc should start.
+    /// </summary>
+    member this.ArcStart = this.BadgeWidth - 10
+
+    /// <summary>
+    /// Return the color code for the badge.
+    /// </summary>
+    // TO-DO: threshold logic
+    member this.BadgeColor = this.DefaultColor
+
+    ///<summary>
+    /// Return the color code for the badge.
+    /// </summary>
+    member this.BadgeColorCode = 
+        this.BadgeColor
+        |> Color.fromString
+        |> Color.toHexCode
+
 
     ///<summary>
     /// Return the correct SVG template to render, based on the style and template
@@ -121,26 +213,26 @@ type Badge(
                 this.Template
 
 
-    //member this.BadgeSvgText =
+    member this.BadgeSvgText =
 
-    //    let badgeText = this.GetSvgTemplate()
+        let badgeText = this.GetSvgTemplate()
 
-    //    badgeText
-    //        .Replace(BADGE_WIDTH, string this.BadgeWidth)
-    //        .Replace(FONT_NAME, this.FontName)
-    //        .Replace(FONT_SIZE, this.FontSize)
-    //        .Replace(LABEL, this.Label)
-    //        .Replace(VALUE, this.value_text)
-    //        .Replace(LABEL_ANCHOR, str(this.label_anchor))
-    //        .Replace(LABEL_ANCHOR_SHADOW, str(this.label_anchor_shadow))
-    //        .Replace(VALUE_ANCHOR, str(this.value_anchor))
-    //        .Replace(VALUE_ANCHOR_SHADOW, str(this.value_anchor_shadow))
-    //        .Replace(COLOR, this.badge_color_code)
-    //        .Replace(LABEL_TEXT_COLOR, this.label_text_color)
-    //        .Replace(VALUE_TEXT_COLOR, this.value_text_color)
-    //        .Replace(COLOR_SPLIT_X, str(this.color_split_position))
-    //        .Replace(VALUE_WIDTH, str(this.value_width))
-    //        .Replace(MASK_ID, this.mask_str)
-    //        .Replace(VALUE_BOX_WIDTH, str(this.value_box_width))
-    //        .Replace(ARC_START, str(this.arc_start))
+        badgeText
+            .Replace(BADGE_WIDTH, string this.BadgeWidth)
+            .Replace(FONT_NAME, this.FontName)
+            .Replace(FONT_SIZE, string this.FontSize)
+            .Replace(LABEL, this.Label)
+            .Replace(VALUE, this.ValueText)
+            .Replace(LABEL_ANCHOR, string this.LabelAnchor)
+            .Replace(LABEL_ANCHOR_SHADOW, string this.LabelAnchorShadow)
+            .Replace(VALUE_ANCHOR, string this.ValueAnchor)
+            .Replace(VALUE_ANCHOR_SHADOW, string this.ValueAnchorShadow)
+            .Replace(COLOR, this.BadgeColorCode)
+            .Replace(LABEL_TEXT_COLOR, this.LabelTextColor)
+            .Replace(VALUE_TEXT_COLOR, this.ValueTextColor)
+            .Replace(COLOR_SPLIT_X, string this.ColorSplitPosition)
+            .Replace(VALUE_WIDTH, string this.ValueWidth)
+            //.Replace(MASK_ID, this.mask_str)
+            .Replace(VALUE_BOX_WIDTH, string this.ValueBoxWidth)
+            .Replace(ARC_START, string this.ArcStart)
         
