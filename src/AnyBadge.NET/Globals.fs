@@ -10,6 +10,8 @@ let internal getEmbeddedResource file =
     use r = new StreamReader(str)
     r.ReadToEnd()
 
+let mutable maskId = 0
+
 let DEFAULT_TEMPLATE = getEmbeddedResource "templates.default.svg"
 
 let GITLAB_SCOPED_TEMPLATE = getEmbeddedResource "templates.gitlab_scoped.svg"

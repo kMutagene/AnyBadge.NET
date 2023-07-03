@@ -2,10 +2,17 @@
 
 open System.IO
 open Globals
+open Semver
 
 type TemplateStyle =
     | Default
     | GitLabScoped
+
+type ValueType =
+    | StringValue
+    | IntValue
+    | FloatValue
+    | SemverValue
 
 type Badge(
     Label: string,
@@ -19,7 +26,7 @@ type Badge(
     ?Style: TemplateStyle,
     ?ValuePrefix: string,
     ?ValueSuffix: string,
-    ?Thresholds: Map<float,string>,
+    ?Thresholds: Map<string,string>,
     ?DefaultColor: string,
     ?UseMaxWhenValueExceeds: bool,
     ?ValueFormat,
@@ -83,8 +90,10 @@ type Badge(
     member this.TextColor = textColor
     member this.LabelTextColor = labelTextColor
     member this.ValueTextColor = valueTextColor
-    member this.Use_max_when_value_exceeds = defaultArg UseMaxWhenValueExceeds true
-    //member this.Mask_str = self.__class__._get_next_mask_str() // not sure how to port this yet
+    member this.UseMaxWhenValueExceeds = defaultArg UseMaxWhenValueExceeds true
+    member this.MaskStr = 
+        Globals.maskId <- Globals.maskId + 1 // in the port we increase the mask id globally
+        Globals.maskId
 
     /// <summary>
     /// Return the width multiplier for a font.
@@ -178,11 +187,150 @@ type Badge(
     /// </summary>
     member this.ArcStart = this.BadgeWidth - 10
 
+    member this.ValueIsInt = 
+        //"""Identify whether the value text is an int.
+        //
+        //Returns: bool
+        //"""
+        try
+            let a = int(this.Value)
+            let b = float(this.Value)
+            float a = b
+        with _ ->
+            false
+            
+
+    member this.ValueIsFloat =
+        // If the value is an int then it should not be considered a float.
+        // We need to check this first before we check whether it is a float because the
+        // float check also returns True for an int string.
+        if this.ValueIsInt then
+            false
+        else
+            try
+                float(this.Value) |> ignore
+                true
+            with _ ->
+                false
+
+
+    member this.ValueType =
+        if this.ValueIsVersion then
+            ValueType.SemverValue 
+        elif this.ValueIsFloat then
+            ValueType.FloatValue
+        elif this.ValueIsInt then
+            ValueType.IntValue
+        else
+            ValueType.StringValue
+
+    member this.SemverVersion =
+        if this.ValueIsVersion && this.ValueType = ValueType.SemverValue then
+            Some (SemVersion.Parse(this.Value, style=SemVersionStyles.Any))
+        else
+            None
+
+    //"""Thresholds as a dict using Version as keys."""
+    member this.SemverThresholds =
+        // Version is not a hashable type, so can't be used to create an
+        // ordered dict directly. First we need to create an ordered list of keys
+        match this.Thresholds with
+        | None -> None
+        | Some t ->
+            if this.ValueIsVersion && this.ValueType = ValueType.SemverValue then
+                Some (
+                    t 
+                    |> Map.toArray
+                    |> Array.map (fun (ver,col) ->
+                        SemVersion.Parse(ver, style=SemVersionStyles.Any), col
+                    )
+                    |> Map.ofArray
+                )
+            else
+                None
+
+    member this.FloatThresholds =
+        //"""Thresholds as a dict using float as keys."""
+        match this.Thresholds with
+        | None -> None
+        | Some t ->
+            if this.ValueIsFloat || this.ValueIsInt then
+                Some (
+                        t 
+                        |> Map.toArray
+                        |> Array.map (fun (step,col) ->
+                            float step, col
+                        )
+                        |> Map.ofArray
+                    )
+                else
+                    None
+
+
     /// <summary>
     /// Return the color code for the badge.
     /// </summary>
     // TO-DO: threshold logic
-    member this.BadgeColor = this.DefaultColor
+    member this.BadgeColor = 
+        //"""Badge color based on the configured thresholds."""
+        // If no thresholds were passed then return the default color
+        match this.Thresholds with 
+        | None -> this.DefaultColor
+        | Some t ->
+            match this.ValueType with
+            | ValueType.StringValue ->
+                if Map.containsKey this.Value t then
+                    t[this.Value]
+                else
+                    this.DefaultColor
+            | ValueType.SemverValue ->
+                // Set value and thresholds based on the value type. This will result in either
+                // value and thresholds as floats or value and thresholds as semantic versions.
+                
+                let thresholds = this.SemverThresholds.Value
+                let value = this.SemverVersion.Value
+
+                let mutable exceeds = true
+                let mutable color = this.DefaultColor
+
+                thresholds
+                |> Map.toSeq
+                |> Seq.rev
+                |> Seq.iter (fun (threshold,thresholdColor) ->
+                    if value < threshold then 
+                        color <- thresholdColor
+                        exceeds <- false
+                )
+
+                if not exceeds then
+                    color
+                elif this.UseMaxWhenValueExceeds then
+                    thresholds.[thresholds.Keys |> Seq.max]
+                else
+                    this.DefaultColor
+
+            | _ ->
+                let thresholds = this.FloatThresholds.Value
+                let value = float this.Value
+
+                let mutable exceeds = true
+                let mutable color = this.DefaultColor
+
+                thresholds
+                |> Map.toSeq
+                |> Seq.rev
+                |> Seq.iter (fun (threshold,thresholdColor) ->
+                    if value < threshold then 
+                        color <- thresholdColor
+                        exceeds <- false
+                )
+
+                if not exceeds then
+                    color
+                elif this.UseMaxWhenValueExceeds then
+                    thresholds.[thresholds.Keys |> Seq.max]
+                else
+                    this.DefaultColor
 
     ///<summary>
     /// Return the color code for the badge.
@@ -248,7 +396,7 @@ type Badge(
         ?Style: TemplateStyle,
         ?ValuePrefix: string,
         ?ValueSuffix: string,
-        ?Thresholds: Map<float,Color>,
+        ?Thresholds: Map<string,Color>,
         ?DefaultColor: Color,
         ?UseMaxWhenValueExceeds: bool,
         ?ValueFormat,

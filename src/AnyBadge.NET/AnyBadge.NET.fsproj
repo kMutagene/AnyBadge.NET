@@ -16,4 +16,8 @@
     <Compile Include="Library.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Semver" Version="2.3.0" />
+  </ItemGroup>
+  
 </Project>

@@ -1,3 +1,4 @@
+#r "nuget: Semver"
 #r "bin/Debug/net6.0/AnyBadge.NET.dll"
 
 open AnyBadge.NET
