@@ -30,6 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{A6A85E4E-E82F-4143-899A-FF00B69F1075}"
 	ProjectSection(SolutionItems) = preProject
 		LICENSE = LICENSE
+		src\AnyBadge.NET\playground.ipynb = src\AnyBadge.NET\playground.ipynb
 		README.md = README.md
 		RELEASE_NOTES.md = RELEASE_NOTES.md
 	EndProjectSection

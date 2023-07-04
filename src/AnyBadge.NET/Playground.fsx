@@ -170,8 +170,8 @@ let color_badges =
     ] 
     |> List.map (fun c ->
         Badge (
-            Label = "Color",
-            Value = c.ToString(),
+            label = "Color",
+            value = c.ToString(),
             DefaultColor = c
         )
     )

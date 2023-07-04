@@ -15,8 +15,8 @@ type ValueType =
     | SemverValue
 
 type Badge(
-    Label: string,
-    Value: string,
+    label: string,
+    value: string,
     ?FontName: string,
     ?FontSize: int,
     ?NumPaddingChars: int,
@@ -59,8 +59,8 @@ type Badge(
 
     let valueText =
         match ValueFormat with
-        | Some f -> sprintf f Value
-        | None -> Value
+        | Some f -> sprintf f value
+        | None -> value
 
     // text_color can be passed as a single value or a pair of comma delimited values
     let textColors = textColor.Split(",")
@@ -71,8 +71,8 @@ type Badge(
         else
             textColors.[0]
  
-    member this.Label = Label
-    member this.Value = Value
+    member this.Label = label
+    member this.Value = value
 
     member this.ValueIsVersion = defaultArg Semver false
     member this.ValueFormat = ValueFormat
@@ -380,13 +380,13 @@ type Badge(
             .Replace(VALUE_TEXT_COLOR, this.ValueTextColor)
             .Replace(COLOR_SPLIT_X, string this.ColorSplitPosition)
             .Replace(VALUE_WIDTH, string this.ValueWidth)
-            //.Replace(MASK_ID, this.mask_str)
+            .Replace(MASK_ID, string this.MaskStr)
             .Replace(VALUE_BOX_WIDTH, string this.ValueBoxWidth)
             .Replace(ARC_START, string this.ArcStart)
         
     new (
-        Label: string,
-        Value: string,
+        label: string,
+        value: string,
         ?FontName: string,
         ?FontSize: int,
         ?NumPaddingChars: int,
@@ -404,8 +404,8 @@ type Badge(
         ?Semver: bool
     ) = 
         Badge(
-            Label = Label,
-            Value = Value,
+            label = label,
+            value = value,
             ?FontName = FontName,
             ?FontSize = FontSize,
             ?NumPaddingChars = NumPaddingChars,

@@ -4,10 +4,10 @@
         <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
         <stop offset="1" stop-opacity=".1"/>
     </linearGradient>
-    <mask id="{{ mask id }}">
+    <mask id="112">
         <rect width="127" height="20" rx="3" fill="#fff"/>
     </mask>
-    <g mask="url(#{{ mask id }})">
+    <g mask="url(#112)">
         <path fill="#555" d="M0 0h41v20H0z"/>
         <path fill="#F4A460" d="M41 0h86v20H41z"/>
         <path fill="url(#b)" d="M0 0h127v20H0z"/>
