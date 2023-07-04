@@ -387,6 +387,7 @@ type Badge(
     new (
         label: string,
         value: string,
+        defaultColor: Color,
         ?FontName: string,
         ?FontSize: int,
         ?NumPaddingChars: int,
@@ -397,7 +398,6 @@ type Badge(
         ?ValuePrefix: string,
         ?ValueSuffix: string,
         ?Thresholds: Map<string,Color>,
-        ?DefaultColor: Color,
         ?UseMaxWhenValueExceeds: bool,
         ?ValueFormat,
         ?TextColor: string,
@@ -406,6 +406,7 @@ type Badge(
         Badge(
             label = label,
             value = value,
+            DefaultColor = (defaultColor |> Color.toHexCode),
             ?FontName = FontName,
             ?FontSize = FontSize,
             ?NumPaddingChars = NumPaddingChars,
@@ -421,7 +422,6 @@ type Badge(
                     m |> Map.map (fun k v -> Color.toHexCode v)
                 )
             ),
-            ?DefaultColor = (DefaultColor |> Option.map Color.toHexCode),
             ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
             ?ValueFormat = ValueFormat,
             ?TextColor = TextColor,
