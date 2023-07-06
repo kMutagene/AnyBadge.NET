@@ -250,3 +250,24 @@ let ``test badge width with medium value text zero pad`` () =
 //    ):
 //        badge.write_badge(str(TESTS_DIR / Path("exists")))
 //        badge.write_badge(str(TESTS_DIR / Path("exists")))
+
+// Test wether value width is calculated correctly when using a value prefix
+[<Fact>]
+let ``test value width with prefix``() =
+    let badge = Badge(label = "aa", value= "a", ValuePrefix="a")
+    Assert.Equal(badge.LabelWidth, badge.ValueWidth)
+    Assert.Equal(24, badge.ValueWidth)
+
+// Test wether value width is calculated correctly when using a value suffix
+[<Fact>]
+let ``test value width with suffix``() =
+    let badge = Badge(label = "aa", value= "a", ValueSuffix="a")
+    Assert.Equal(badge.LabelWidth, badge.ValueWidth)
+    Assert.Equal(24, badge.ValueWidth)
+
+// Test wether value width is calculated correctly when using a value suffix
+[<Fact>]
+let ``test value width with pefix and suffix``() =
+    let badge = Badge(label = "aaa", value= "a", ValueSuffix="a", ValuePrefix = "a")
+    Assert.Equal(badge.LabelWidth, badge.ValueWidth)
+    Assert.Equal(31, badge.ValueWidth)

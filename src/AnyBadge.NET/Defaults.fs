@@ -10,7 +10,7 @@ let DEFAULT_COLOR= "#4c1"
 
 let DEFAULT_TEXT_COLOR = "#fff"
 
-let MASK_ID_PREFIX = "anybadge_"
+let MASK_ID_PREFIX = "AnyBadge.Net_"
 
 // Dictionary for looking up approx pixel widths of
 // supported fonts and font sizes.

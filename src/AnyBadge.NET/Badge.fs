@@ -141,7 +141,7 @@ type Badge(
     /// </summary>
     member this.ValueWidth =
 
-        float (this.GetTextWidth(this.Value))
+        float (this.GetTextWidth(this.ValueText))
         + (2.0 * this.NumLabelPaddingChars * (float this.FontWidth))
         |> int
 
