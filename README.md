@@ -24,7 +24,7 @@ command line](https://github.com/kMutagene/AnyBadge.NET/issues/2) as a .NET tool
 
 ## Demo
 
-Have a look at the [playground notebook]("src/AnyBadge.NET/playground.ipynb") which shows how to use the library.
+Have a look at the [playground notebook](./src/AnyBadge.NET/playground.ipynb) which shows how to use the library.
 
 
 Available named colors are:
