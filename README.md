@@ -1,5 +1,31 @@
 # AnyBadge.NET
-A .NET port of https://github.com/jongracecox/anybadge written in F#.
+A .NET port of https://github.com/jongracecox/anybadge written in F#. It generates generating badges for your projects.
+
+The port is aimed to be honest to the python source, even when the translation leads to non-idiomatic F#.
+In the future, there might be dedicated F# and C# sub-packages, that add idiomatic API layers.
+
+
+## Overview
+
+`AnyBadge.NET` can be used to add badge generation to your .NET projects.
+It will also provide a [command line interface soon](https://github.com/kMutagene/AnyBadge.NET/issues/2).
+
+This utility can be used to generate .svg badge images, using configurable
+thresholds for coloring the badges based on the badge value. Many badge
+generation tools just provide the ability to specify the color of badge.
+`AnyBadge.NET` allows you to specify the label, badge value, and color, but
+it also allows you to specify a set of thresholds that can be used to
+select a color based on the badge value.
+
+`AnyBadge.NET` may be useful wherever a call to external badge services may be undesirable, or not customizable enough.
+
+The package can referenced from nuget, [or soon also run directly from the
+command line](https://github.com/kMutagene/AnyBadge.NET/issues/2) as a .NET tool.
+
+## Demo
+
+Have a look at the [playground notebook]("./src/AnyBadge.NET/playground.ipynb") which shows how to use the library.
+
 
 Available named colors are:
 

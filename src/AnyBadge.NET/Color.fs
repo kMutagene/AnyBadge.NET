@@ -320,7 +320,7 @@ type Color =
         | Custom s -> s
 
     static member fromString (s:string) =
-        match s with
+        match s.ToUpper() with
         | "#000000" | "BLACK" -> BLACK
         | "#000080" | "NAVY" -> NAVY 
         | "#00008B" | "DARKBLUE" -> DARKBLUE
