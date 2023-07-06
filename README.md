@@ -1,5 +1,5 @@
 # AnyBadge.NET
-A .NET port of https://github.com/jongracecox/anybadge written in F#. It generates generating badges for your projects.
+A .NET port of https://github.com/jongracecox/anybadge written in F#. It generates badges for your projects.
 
 The port is aimed to be honest to the python source, even when the translation leads to non-idiomatic F#.
 In the future, there might be dedicated F# and C# sub-packages, that add idiomatic API layers.
