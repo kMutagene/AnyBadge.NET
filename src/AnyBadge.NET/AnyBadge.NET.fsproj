@@ -2,9 +2,31 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <!-- Optional: Declare that the Repository URL can be published to NuSpec -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <!-- Optional: Embed source files that are not tracked by the source control manager to the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <!-- Optional: Include PDB in the built .nupkg -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-
+  <PropertyGroup>
+    <Authors>Kevin Schneider</Authors>
+    <Description>A .svg badge creation library for .NET</Description>
+    <Summary>A .svg badge creation library for .NET. This is a .NET port of https://github.com/jongracecox/anybadge written in F#. The port is aimed to be honest to the python source, even when the translation leads to non-idiomatic F#. In the future, there might be dedicated F# and C# sub-packages, that add idiomatic API layers.</Summary>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/kMutagene/AnyBadge.NET</PackageProjectUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageTags>visualization charting plotly fsharp csharp</PackageTags>
+    <RepositoryUrl>https://github.com/kMutagene/AnyBadge.NET</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <FsDocsLicenseLink>https://github.com/kMutagene/AnyBadge.NET/blob/main/LICENSE</FsDocsLicenseLink>
+    <FsDocsReleaseNotesLink>https://github.com/kMutagene/AnyBadge.NET/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+  </PropertyGroup>
   <ItemGroup>
     <None Include="Playground.fsx" />
     <EmbeddedResource Include="templates/*.svg"></EmbeddedResource>
@@ -18,6 +40,7 @@
 
   <ItemGroup>
     <PackageReference Include="Semver" Version="2.3.0" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
   
 </Project>
