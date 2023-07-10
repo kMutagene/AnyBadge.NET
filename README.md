@@ -1,9 +1,12 @@
 # AnyBadge.NET
+
+[![Build and test](https://github.com/kMutagene/AnyBadge.NET/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/plotly/Plotly.NET/actions/workflows/build-and-test.yml)
+[![](https://img.shields.io/nuget/vpre/AnyBadge.NET)](https://www.nuget.org/packages/AnyBadge.NET/)
+
 A .NET port of https://github.com/jongracecox/anybadge written in F#. It generates badges for your projects.
 
 The port is aimed to be honest to the python source, even when the translation leads to non-idiomatic F#.
 In the future, there might be dedicated F# and C# sub-packages, that add idiomatic API layers.
-
 
 ## Overview
 
@@ -19,7 +22,7 @@ select a color based on the badge value.
 
 `AnyBadge.NET` may be useful wherever a call to external badge services may be undesirable, or not customizable enough.
 
-The package can referenced from nuget, [or soon also run directly from the
+The package can referenced from nuget [![](https://img.shields.io/nuget/vpre/AnyBadge.NET)](https://www.nuget.org/packages/AnyBadge.NET/) , [or soon also run directly from the
 command line](https://github.com/kMutagene/AnyBadge.NET/issues/2) as a .NET tool.
 
 ## Demo
