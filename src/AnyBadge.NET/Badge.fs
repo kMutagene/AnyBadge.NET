@@ -73,6 +73,10 @@ type Badge(
         else
             textColors.[0]
  
+    let maskStr = 
+        Globals.maskId <- Globals.maskId + 1 // in the port we increase the mask id globally
+        Globals.maskId
+
     member this.Label = label
     member this.Value = value
 
@@ -93,10 +97,8 @@ type Badge(
     member this.LabelTextColor = labelTextColor
     member this.ValueTextColor = valueTextColor
     member this.UseMaxWhenValueExceeds = defaultArg UseMaxWhenValueExceeds true
-    member this.MaskStr = 
-        Globals.maskId <- Globals.maskId + 1 // in the port we increase the mask id globally
-        Globals.maskId
-
+    member this.MaskStr = maskStr
+        
     /// <summary>
     /// Return the width multiplier for a font.
     ///
@@ -385,7 +387,12 @@ type Badge(
             .Replace(MASK_ID, string this.MaskStr)
             .Replace(VALUE_BOX_WIDTH, string this.ValueBoxWidth)
             .Replace(ARC_START, string this.ArcStart)
-        
+    
+    member this.WriteBadge(path:string) =
+        let path = if path.EndsWith(".svg") then path else path + ".svg"
+        File.WriteAllText(path,this.BadgeSvgText)
+
+
     new (
         label: string,
         value: string,

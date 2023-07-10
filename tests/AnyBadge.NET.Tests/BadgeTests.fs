@@ -216,3 +216,14 @@ let ``test value width with pefix and suffix``() =
     let badge = Badge(label = "aaa", value= "a", ValueSuffix="a", ValuePrefix = "a")
     Assert.Equal(badge.LabelWidth, badge.ValueWidth)
     Assert.Equal(31, badge.ValueWidth)
+
+[<Fact>]
+let ``test simple badge write`` () =
+    let badge = Badge(
+        label = "label",
+        value = "value"
+    )
+    let p = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "test.svg")
+    badge.WriteBadge(p)
+    let result = System.IO.File.ReadAllText(p)
+    Assert.Equal(badge.BadgeSvgText, result)
