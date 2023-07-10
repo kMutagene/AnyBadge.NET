@@ -54,7 +54,9 @@ type Badge(
 
     let template = defaultArg Template Globals.DEFAULT_TEMPLATE
     let style = defaultArg Style TemplateStyle.Default
-    let defaultColor = defaultArg DefaultColor Defaults.DEFAULT_COLOR
+    let defaultColor = 
+        let _ =  defaultArg DefaultColor Defaults.DEFAULT_COLOR |> Color.fromString |> ignore // make sure color is parseable
+        defaultArg DefaultColor Defaults.DEFAULT_COLOR
     let textColor = defaultArg TextColor Defaults.DEFAULT_TEXT_COLOR
 
     let valueText =
@@ -420,6 +422,196 @@ type Badge(
                 Thresholds 
                 |> Option.map (fun m ->
                     m |> Map.map (fun k v -> Color.toHexCode v)
+                )
+            ),
+            ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
+            ?ValueFormat = ValueFormat,
+            ?TextColor = TextColor,
+            ?Semver = Semver
+        )
+
+    new (
+        label: string,
+        value: int,
+        defaultColor: Color,
+        ?FontName: string,
+        ?FontSize: int,
+        ?NumPaddingChars: int,
+        ?NumLabelPaddingChars: float,
+        ?NumValuePaddingChars: float,
+        ?Template: string,
+        ?Style: TemplateStyle,
+        ?ValuePrefix: string,
+        ?ValueSuffix: string,
+        ?Thresholds: Map<int,Color>,
+        ?UseMaxWhenValueExceeds: bool,
+        ?ValueFormat,
+        ?TextColor: string,
+        ?Semver: bool
+    ) = 
+        Badge(
+            label = label,
+            value = string value,
+            DefaultColor = (defaultColor |> Color.toHexCode),
+            ?FontName = FontName,
+            ?FontSize = FontSize,
+            ?NumPaddingChars = NumPaddingChars,
+            ?NumLabelPaddingChars = NumLabelPaddingChars,
+            ?NumValuePaddingChars = NumValuePaddingChars,
+            ?Template = Template,
+            ?Style = Style,
+            ?ValuePrefix = ValuePrefix,
+            ?ValueSuffix = ValueSuffix,
+            ?Thresholds = (
+                Thresholds 
+                |> Option.map (fun m ->
+                    m 
+                    |> Map.toList 
+                    |> List.map (fun (k,v)-> string k, v)
+                    |> Map.ofList
+                    |> Map.map (fun k v -> Color.toHexCode v)
+                )
+            ),
+            ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
+            ?ValueFormat = ValueFormat,
+            ?TextColor = TextColor,
+            ?Semver = Semver
+        )
+
+    new (
+        label: string,
+        value: int,
+        ?DefaultColor: string,
+        ?FontName: string,
+        ?FontSize: int,
+        ?NumPaddingChars: int,
+        ?NumLabelPaddingChars: float,
+        ?NumValuePaddingChars: float,
+        ?Template: string,
+        ?Style: TemplateStyle,
+        ?ValuePrefix: string,
+        ?ValueSuffix: string,
+        ?Thresholds: Map<int,string>,
+        ?UseMaxWhenValueExceeds: bool,
+        ?ValueFormat,
+        ?TextColor: string,
+        ?Semver: bool
+    ) = 
+        Badge(
+            label = label,
+            value = string value,
+            ?DefaultColor = DefaultColor,
+            ?FontName = FontName,
+            ?FontSize = FontSize,
+            ?NumPaddingChars = NumPaddingChars,
+            ?NumLabelPaddingChars = NumLabelPaddingChars,
+            ?NumValuePaddingChars = NumValuePaddingChars,
+            ?Template = Template,
+            ?Style = Style,
+            ?ValuePrefix = ValuePrefix,
+            ?ValueSuffix = ValueSuffix,
+            ?Thresholds = (
+                Thresholds 
+                |> Option.map (fun m ->
+                    m 
+                    |> Map.toList 
+                    |> List.map (fun (k,v)-> string k, v)
+                    |> Map.ofList
+                )
+            ),
+            ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
+            ?ValueFormat = ValueFormat,
+            ?TextColor = TextColor,
+            ?Semver = Semver
+        )
+
+    new (
+        label: string,
+        value: float,
+        defaultColor: Color,
+        ?FontName: string,
+        ?FontSize: int,
+        ?NumPaddingChars: int,
+        ?NumLabelPaddingChars: float,
+        ?NumValuePaddingChars: float,
+        ?Template: string,
+        ?Style: TemplateStyle,
+        ?ValuePrefix: string,
+        ?ValueSuffix: string,
+        ?Thresholds: Map<float,Color>,
+        ?UseMaxWhenValueExceeds: bool,
+        ?ValueFormat,
+        ?TextColor: string,
+        ?Semver: bool
+    ) = 
+        Badge(
+            label = label,
+            value = string value,
+            DefaultColor = (defaultColor |> Color.toHexCode),
+            ?FontName = FontName,
+            ?FontSize = FontSize,
+            ?NumPaddingChars = NumPaddingChars,
+            ?NumLabelPaddingChars = NumLabelPaddingChars,
+            ?NumValuePaddingChars = NumValuePaddingChars,
+            ?Template = Template,
+            ?Style = Style,
+            ?ValuePrefix = ValuePrefix,
+            ?ValueSuffix = ValueSuffix,
+            ?Thresholds = (
+                Thresholds 
+                |> Option.map (fun m ->
+                    m 
+                    |> Map.toList 
+                    |> List.map (fun (k,v)-> string k, v)
+                    |> Map.ofList
+                    |> Map.map (fun k v -> Color.toHexCode v)
+                )
+            ),
+            ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,
+            ?ValueFormat = ValueFormat,
+            ?TextColor = TextColor,
+            ?Semver = Semver
+        )
+
+    new (
+        label: string,
+        value: float,
+        ?DefaultColor: string,
+        ?FontName: string,
+        ?FontSize: int,
+        ?NumPaddingChars: int,
+        ?NumLabelPaddingChars: float,
+        ?NumValuePaddingChars: float,
+        ?Template: string,
+        ?Style: TemplateStyle,
+        ?ValuePrefix: string,
+        ?ValueSuffix: string,
+        ?Thresholds: Map<float,string>,
+        ?UseMaxWhenValueExceeds: bool,
+        ?ValueFormat,
+        ?TextColor: string,
+        ?Semver: bool
+    ) = 
+        Badge(
+            label = label,
+            value = string value,
+            ?DefaultColor = DefaultColor,
+            ?FontName = FontName,
+            ?FontSize = FontSize,
+            ?NumPaddingChars = NumPaddingChars,
+            ?NumLabelPaddingChars = NumLabelPaddingChars,
+            ?NumValuePaddingChars = NumValuePaddingChars,
+            ?Template = Template,
+            ?Style = Style,
+            ?ValuePrefix = ValuePrefix,
+            ?ValueSuffix = ValueSuffix,
+            ?Thresholds = (
+                Thresholds 
+                |> Option.map (fun m ->
+                    m 
+                    |> Map.toList 
+                    |> List.map (fun (k,v)-> string k, v)
+                    |> Map.ofList
                 )
             ),
             ?UseMaxWhenValueExceeds = UseMaxWhenValueExceeds,

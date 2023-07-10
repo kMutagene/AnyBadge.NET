@@ -9,6 +9,8 @@ let b = Badge("test", "42", DefaultColor = "#4c1", TextColor = "#fff")
 b.BadgeSvgText
 |> fun b -> File.WriteAllText(@"C:/Users/schne/Source/repos/kMutagene/AnyBadge.NET/src/AnyBadge.NET/badge.svg", b)
 
+Badge(label="label", value="fred", DefaultColor="soos").BadgeColorCode
+
 let color_badges = 
     [
         BLACK
@@ -171,8 +173,8 @@ let color_badges =
     |> List.map (fun c ->
         Badge (
             label = "Color",
-            value = c.ToString(),
-            DefaultColor = c
+            value = (c.ToString()),
+            defaultColor = c
         )
     )
 

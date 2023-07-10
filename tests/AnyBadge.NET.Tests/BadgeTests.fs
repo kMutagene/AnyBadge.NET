@@ -2,6 +2,7 @@
 
 open Xunit
 open AnyBadge.NET
+open System
 
 //Test that label and value widths are equal when text is the same.
 [<Fact>]
@@ -37,6 +38,7 @@ let ``test badge width with long value text zero padding`` () =
     )
     Assert.True(badge.BadgeWidth <= 306)
 
+
 //Test the width of a badge generated with a medium text value.
 [<Fact>]
 let ``test badge width with medium value text`` () = 
@@ -54,202 +56,145 @@ let ``test badge width with medium value text zero pad`` () =
     )
     Assert.True(badge.BadgeWidth <= 156)
 
-//def test_badge_width_with_short_value_text(self):
-//    """Test the width of a badge generated with a short text value."""
+[<Fact>]
+let ``test badge width with short value text`` () =
+    let badge = Badge(label="short", value="1", DefaultColor="green")
+    Assert.True(badge.BadgeWidth <= 101)
 
-//    badge = Badge(label="short", value="1", default_color="green")
+[<Fact>]
+let ``test badge width with short value text zero pad`` () =
+    let badge = Badge(
+        label="short value no padding",
+        value="1",
+        DefaultColor="green",
+        NumPaddingChars=0
+    )
+    Assert.True(badge.BadgeWidth <= 143)
 
-//    badge.write_badge("test_badge_short.svg", overwrite=True)
+[<Fact>]
+let ``test badge width with tiny value text`` () =
+    let badge = Badge(label="a", value="1", DefaultColor="green")
+    Assert.True(badge.BadgeWidth <= 76)
 
-//    self.assertLessEqual(badge.badge_width, 101)
+[<Fact>]
+let ``test badge width with tiny value text no padding`` () =
+    let badge = Badge(label="a", value="1", DefaultColor="green", NumPaddingChars=0)
+    Assert.True(badge.BadgeWidth <= 76)
 
-//def test_badge_width_with_short_value_text_zero_pad(self):
-//    """Test the width of a badge generated with a short text value."""
+[<Fact>]
+let ``test badge width thresholds`` () =
+    let thresholds = Map(["2", "red"; "4", "orange"; "6", "green"; "8", "brightgreen"])
+    let badge = Badge(label="thresholds", value="2.22", ValueSuffix="%", Thresholds=thresholds)
+    Assert.Equal(badge.BadgeColorCode, Color.toHexCode(ORANGE))
 
-//    badge = Badge(
-//        label="short value no padding",
-//        value="1",
-//        default_color="green",
-//        num_padding_chars=0,
-//    )
+[<Fact>]
+let ``test badge with text color`` () =
+    let badge = Badge(
+        label="text color",
+        value="2.22",
+        ValueSuffix="%",
+        TextColor="#010101"
+    )
+    Assert.Equal(badge.TextColor, Color.toHexCode(Color.Custom "#010101"))
 
-//    badge.write_badge("test_badge_short_no_padding.svg", overwrite=True)
+[<Fact>]
+let ``test multiple badges in one session`` () =
+    let badges = [
+        Badge(label="multiple 1", value="100", ValueSuffix="%", NumPaddingChars=0)
+        Badge(label="multiple 2", value="1234567890")
+    ]
+    Assert.NotEqual(badges.[0].BadgeWidth, badges.[1].BadgeWidth)
 
-//    self.assertLessEqual(badge.badge_width, 143)
+[<Fact>]
+let ``test multiple badges get different mask`` () =
+    let badges = [
+        Badge(label="multiple 1", value="100", ValueSuffix="%", NumPaddingChars=0)
+        Badge(label="multiple 2", value="1234567890")
+    ]
+    Assert.NotEqual(badges.[0].MaskStr, badges.[1].MaskStr)
 
-//def test_badge_width_with_tiny_value_text(self):
-//    """Test the width of a badge generated with a short text value."""
+[<Fact>]
+let ``test integer str value is handled as integer`` () =
+    let badge = Badge(label="integer", value="1234")
+    Assert.True(badge.ValueIsInt)
+    Assert.False(badge.ValueIsFloat)
 
-//    badge = Badge(label="a", value="1", default_color="green")
+[<Fact>]
+let ``test integer int value is handled as integer`` () =
+    let badge = Badge(label="integer", value=1234)
+    Assert.True(badge.ValueIsInt)
+    Assert.False(badge.ValueIsFloat)
 
-//    badge.write_badge("test_badge_tiny_text_value.svg", overwrite=True)
+[<Fact>]
+let ``test float str value is handled as float`` () =
+    let badge = Badge(label="float str", value="1234.1")
+    Assert.False(badge.ValueIsInt)
+    Assert.True(badge.ValueIsFloat)
 
-//    self.assertLessEqual(badge.badge_width, 76)
+[<Fact>]
+let ``test float value is handled as float`` () =
+    let badge = Badge(label="float int", value=1234.1)
+    Assert.False(badge.ValueIsInt)
+    Assert.True(badge.ValueIsFloat)
 
-//def test_badge_width_with_tiny_value_text_no_padding(self):
-//    """Test the width of a badge generated with a short text value."""
+[<Fact>]
+let ``test float value with zero decimal`` () =
+    let badge = Badge(label="float with zeros", value="10.00")
+    Assert.False(badge.ValueIsInt)
+    Assert.True(badge.ValueIsFloat)
 
-//    badge = Badge(label="a", value="1", default_color="green", num_padding_chars=0)
+[<Fact>]
+let ``test float value with non zero decimal`` () =
+    let badge = Badge(label="float str no decimal", value="10.01")
+    Assert.False(badge.ValueIsInt)
+    Assert.True(badge.ValueIsFloat)
 
-//    badge.write_badge("test_badge_tiny_text_value_no_padding.svg", overwrite=True)
+[<Fact>]
+let ``test label width no padding`` () =
+    let badge = Badge(label="a", value="1", NumLabelPaddingChars = 0)
+    Assert.True(badge.LabelWidth <= 7)
 
-//    self.assertLessEqual(badge.badge_width, 76)
+[<Fact>]
+let ``test label width with padding`` () =
+    let badge = Badge(label="a", value="1", NumLabelPaddingChars = 2)
+    Assert.True(badge.LabelWidth <= 47)
 
-//def test_badge_with_thresholds(self):
-//    """Test generating a badge using thresholds."""
-//    thresholds = {2: "red", 4: "orange", 6: "green", 8: "brightgreen"}
+[<Fact>]
+let ``test value width no padding`` () =
+    let badge = Badge(label="a", value="1", NumLabelPaddingChars = 0)
+    Assert.Equal(badge.ValueWidth,  7)
 
-//    badge = Badge("thresholds", "2.22", value_suffix="%", thresholds=thresholds)
+[<Fact>]
+let ``test value width with padding`` () =
+    let badge = Badge(label="a", value="1", NumLabelPaddingChars = 2)
+    Assert.True(badge.ValueWidth <= 47)
 
-//    badge.write_badge("test_badge_thresholds.svg", overwrite=True)
+[<Fact>]
+let ``test value formatting`` () =
+    let badge = Badge(label="value formatting", value="10", ValueFormat = Printf.StringFormat<_>("%s hits/sec"))
+    Assert.Equal("10 hits/sec", badge.ValueText)
 
-//def test_badge_with_text_color(self):
-//    """Test generating a badge with alternate text_color."""
+[<Fact>]
+let ``test font name`` () =
+    let font = "Arial, Helvetica, sans-serif"
+    let badge = Badge(label="font", value=font, FontName=font)
 
-//    badge = Badge(
-//        "text color", "2.22", value_suffix="%", text_color="#010101,#101010"
-//    )
+    Assert.Equal(badge.FontName,font)
 
-//    badge.write_badge("test_badge_text_color.svg", overwrite=True)
+[<Fact>]
+let ``test invalid font name`` () =
+    let font = "Invalid font"
+    Assert.Throws<System.Exception>(fun () -> Badge(label="font", value=font, FontName=font) |> ignore)
 
-//def test_multiple_badges_in_one_session(self):
+[<Fact>]
+let ``test font size`` () =
+    let badge = Badge(label="font size", value=10, FontSize=10)
+    Assert.Equal(badge.FontSize, 10)
 
-//    badges = [
-//        Badge("multiple 1", value="100", value_suffix="%", num_padding_chars=0),
-//        Badge("multiple 2", value="1234567890"),
-//    ]
-
-//    self.assertNotEqual(badges[0].badge_width, badges[1].badge_width)
-
-//def test_multiple_badges_get_different_mask(self):
-//    badges = [
-//        Badge("multiple 1", value="100", value_suffix="%", num_padding_chars=0),
-//        Badge("multiple 2", value="1234567890"),
-//    ]
-
-//    self.assertNotEqual(badges[0].mask_str, badges[1].mask_str)
-
-//def test_integer_str_value_is_handled_as_integer(self):
-//    badge = Badge("integer", value="1234")
-
-//    self.assertTrue(badge.value_is_int)
-//    self.assertFalse(badge.value_is_float)
-//    badge.write_badge("test_badge_int_str.svg", overwrite=True)
-
-//def test_integer_int_value_is_handled_as_integer(self):
-//    badge = Badge("integer", value=1234)
-
-//    self.assertTrue(badge.value_is_int)
-//    self.assertFalse(badge.value_is_float)
-//    badge.write_badge("test_badge_int.svg", overwrite=True)
-
-//def test_float_str_value_is_handled_as_float(self):
-//    badge = Badge("float str", value="1234.1")
-
-//    self.assertFalse(badge.value_is_int)
-//    self.assertTrue(badge.value_is_float)
-//    badge.write_badge("test_badge_float_str.svg", overwrite=True)
-
-//def test_float_value_is_handled_as_float(self):
-//    badge = Badge("float int", value=1234.1)
-
-//    self.assertFalse(badge.value_is_int)
-//    self.assertTrue(badge.value_is_float)
-//    badge.write_badge("test_badge_float.svg", overwrite=True)
-
-//def test_float_value_with_zero_decimal(self):
-//    badge = Badge("float with zeros", value="10.00")
-
-//    self.assertFalse(badge.value_is_int)
-//    self.assertTrue(badge.value_is_float)
-//    badge.write_badge("test_badge_float_zeros.svg", overwrite=True)
-
-//def test_float_value_with_non_zero_decimal(self):
-//    badge = Badge("float str no decimal", value="10.01")
-
-//    self.assertFalse(badge.value_is_int)
-//    self.assertTrue(badge.value_is_float)
-//    badge.write_badge("test_badge_float-str-no-decimal.svg", overwrite=True)
-
-//def test_padding_label(self):
-//    badge = Badge("label padding", value="10.01", num_label_padding_chars=2)
-
-//    badge.write_badge("test_badge_padding_label.svg", overwrite=True)
-
-//def test_padding_value(self):
-//    badge = Badge("value padding", value="10.01", num_value_padding_chars=2)
-
-//    badge.write_badge("test_badge_padding_value.svg", overwrite=True)
-
-//def test_value_formatting(self):
-//    badge = Badge("value formatting", value="10", value_format="%s hits/sec")
-
-//    self.assertEqual("10 hits/sec", badge.value_text)
-
-//def test_font_name(self):
-//    font = "Arial, Helvetica, sans-serif"
-//    badge = Badge("font", value=font, font_name=font)
-//    badge.write_badge("test_badge_font.svg", overwrite=True)
-
-//    badge_repr = repr(badge)
-//    self.assertTrue("font_name='Arial, Helvetica, sans-serif'" in badge_repr)
-
-//def test_invalid_font_name(self):
-//    font = "Invalid font"
-//    with self.assertRaises(ValueError):
-//        _ = Badge("font", value=font, font_name=font)
-
-//def test_font_size(self):
-//    for size in [10, 11, 12]:
-//        badge = Badge("font size", value=size, font_size=size)
-//        badge.write_badge("test_badge_font_size_%s.svg" % size, overwrite=True)
-
-//def test_font_size_repr(self):
-//    badge = Badge("font size", value=10, font_size=10)
-//    badge_repr = repr(badge)
-//    self.assertTrue("font_size=10" in badge_repr)
-
-//def test_template_from_file(self):
-//    file = Path(__file__).parent / Path("template.svg")
-//    badge = Badge("template from file", value=file, template=file)
-//    _ = badge.badge_svg_text
-
-//def test_repr_svg(self):
-//    badge = Badge("label", "value")
-//    self.assertEqual(badge.badge_svg_text, badge._repr_svg_())
-
-//def test_str_value_with_threshold_and_default(self):
-//    badge = Badge(
-//        "label",
-//        value="fred",
-//        thresholds={"pass": "green", "fail": "red"},
-//        default_color="orange",
-//    )
-//    self.assertEqual("orange", badge.badge_color)
-
-//def test_invalid_color(self):
-//    with self.assertRaises(ValueError):
-//        badge = Badge("label", value="fred", default_color="floberry")
-//        _ = badge.badge_color_code
-
-//def test_invalid_write_path(self):
-//    badge = Badge("label", "value")
-//    with self.assertRaisesRegex(
-//        ValueError, r"File location may not be a directory\."
-//    ):
-//        badge.write_badge("tests/")
-
-//    with self.assertRaisesRegex(
-//        RuntimeError, r'File ".*tests\/exists\.svg" already exists\.'
-//    ):
-//        badge.write_badge(TESTS_DIR / Path("exists"))
-//        badge.write_badge(TESTS_DIR / Path("exists"))
-
-//    with self.assertRaisesRegex(
-//        RuntimeError, r'File ".*tests\/exists\.svg" already exists\.'
-//    ):
-//        badge.write_badge(str(TESTS_DIR / Path("exists")))
-//        badge.write_badge(str(TESTS_DIR / Path("exists")))
+[<Fact>]
+let ``test invalid color`` () =
+    //Assert.Throws<System.Exception>(fun () -> Color.fromString "soos" |> ignore)
+    Assert.Throws<System.Exception>(fun () -> Badge(label="label", value="fred", DefaultColor="soos") |> ignore)
 
 // Test wether value width is calculated correctly when using a value prefix
 [<Fact>]
