@@ -26,10 +26,12 @@
     <RepositoryType>git</RepositoryType>
     <FsDocsLicenseLink>https://github.com/kMutagene/AnyBadge.NET/blob/main/LICENSE</FsDocsLicenseLink>
     <FsDocsReleaseNotesLink>https://github.com/kMutagene/AnyBadge.NET/blob/main/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="Playground.fsx" />
+    <None Include="..\..\README.md" Pack="true" PackagePath="\"/>
     <EmbeddedResource Include="templates/*.svg"></EmbeddedResource>
     <Compile Include="Globals.fs" />
     <Compile Include="Defaults.fs" />
