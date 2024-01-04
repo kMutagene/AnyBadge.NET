@@ -1,3 +1,7 @@
+### 2.0.0+6560990 (Released 2024-1-4)
+* Additions:
+    * [[#6560990](https://github.com/kMutagene/AnyBadge.NET/commit/6560990794c479c317b591da4c92da61f27b3fbe)] Target netstandard 2.0 with lib, update project to .net 8
+
 ### 1.0.0+d20912a (Released 2023-7-10)
 * Additions:
     * [[#065f2f0](https://github.com/kMutagene/AnyBadge.NET/commit/065f2f0c4a6f31963243728a153cab43eedece0b)] update sample notebook
