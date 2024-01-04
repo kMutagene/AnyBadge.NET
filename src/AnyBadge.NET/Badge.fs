@@ -65,7 +65,7 @@ type Badge(
         | None -> value
 
     // text_color can be passed as a single value or a pair of comma delimited values
-    let textColors = textColor.Split(",")
+    let textColors = textColor.Split(',')
     let labelTextColor = textColors.[0]
     let valueTextColor = 
         if textColors.Length > 1 then
@@ -355,7 +355,7 @@ type Badge(
             Globals.GITLAB_SCOPED_TEMPLATE
         else
             // Identify whether template is a file or the actual template text
-            if this.Template.Split("\n").Length = 1 then
+            if this.Template.Split('\n').Length = 1 then
                 try 
                     File.ReadAllText(this.Template)
                 with _ ->

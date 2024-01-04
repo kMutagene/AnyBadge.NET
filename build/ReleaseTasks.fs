@@ -15,7 +15,7 @@ open Fake.Tools
 open Fake.IO
 open Fake.IO.Globbing.Operators
 
-let createTag = BuildTask.create "CreateTag" [clean; build; runTests; pack] {
+let createTag = BuildTask.create "CreateTag" [clean; buildSolution; runTests; pack] {
     if promptYesNo (sprintf "tagging branch with %s OK?" stableVersionTag ) then
         Git.Branches.tag "" stableVersionTag
         Git.Branches.pushTag "" projectRepo stableVersionTag
@@ -23,7 +23,7 @@ let createTag = BuildTask.create "CreateTag" [clean; build; runTests; pack] {
         failwith "aborted"
 }
 
-let createPrereleaseTag = BuildTask.create "CreatePrereleaseTag" [setPrereleaseTag; clean; build; runTests; packPrerelease] {
+let createPrereleaseTag = BuildTask.create "CreatePrereleaseTag" [setPrereleaseTag; clean; buildSolution; runTests; packPrerelease] {
     if promptYesNo (sprintf "tagging branch with %s OK?" prereleaseTag ) then 
         Git.Branches.tag "" prereleaseTag
         Git.Branches.pushTag "" projectRepo prereleaseTag
@@ -32,7 +32,7 @@ let createPrereleaseTag = BuildTask.create "CreatePrereleaseTag" [setPrereleaseT
 }
 
 
-let publishNuget = BuildTask.create "PublishNuget" [clean; build; runTests; pack] {
+let publishNuget = BuildTask.create "PublishNuget" [clean; buildSolution; runTests; pack] {
     let targets = (!! (sprintf "%s/*.*pkg" pkgDir ))
     for target in targets do printfn "%A" target
     let msg = sprintf "release package with version %s?" stableVersionTag
@@ -45,7 +45,7 @@ let publishNuget = BuildTask.create "PublishNuget" [clean; build; runTests; pack
     else failwith "aborted"
 }
 
-let publishNugetPrerelease = BuildTask.create "PublishNugetPrerelease" [clean; build; runTests; packPrerelease] {
+let publishNugetPrerelease = BuildTask.create "PublishNugetPrerelease" [clean; buildSolution; runTests; packPrerelease] {
     let targets = (!! (sprintf "%s/*.*pkg" pkgDir ))
     for target in targets do printfn "%A" target
     let msg = sprintf "release package with version %s?" prereleaseTag 

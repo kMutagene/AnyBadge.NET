@@ -59,7 +59,7 @@ module Helpers =
 
         for c in text do
             for k in char_width_percentages.Keys do
-                if k.Contains(c) then
+                if Array.contains c (k.ToCharArray()) then
                     size <- size + (char_width_percentages[k] * float(fontWidth))
 
         int(size)
